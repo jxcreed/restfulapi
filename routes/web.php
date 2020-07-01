@@ -17,4 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('/registration', 'Registration@processregistration')->name('processregistration');
+Route::get('/email-verification/{token}', 'Registration@emailverification')->name('emailverification');
 Route::get('/home', 'HomeController@index')->name('home');
+
