@@ -19,6 +19,7 @@ use DB;
 
 class APIUsersController extends Controller
 {
+
     public function usersSave(Request $request) {
 
     	$rules = [
@@ -52,7 +53,7 @@ class APIUsersController extends Controller
     		'email' => $request->email,
     		'password' => Hash::make($request->password),
     		'status' => 0,
-    		'verificationlink' => 'http://'.$_SERVER['HTTP_HOST'].'/email-verification/'.$token,
+    		'verificationlink' => 'http://'.$_SERVER['HTTP_HOST'].'/api/email-verification/'.$token,
     	);
 
     	$temp = "emails.registration_email_api";
@@ -75,4 +76,34 @@ class APIUsersController extends Controller
             return response()->json(["message" => "Failed to add record on database!"], 404);
         }
     }
+
+    public function usersActivation() {
+        
+        $token = request()->segment(count(request()->segments()));
+
+        try {
+            $UpdateUser = User::where('token', $token)->first();
+            $UpdateUser->status = 1;
+            $UpdateUser->save();
+        }
+        catch (\Exception $e) {
+            $UpdateUser = null;
+        }
+
+        $result_user_activate = UsersModel::select('token','firstname','lastname','email','password', DB::raw("(
+            CASE 
+                WHEN status = 0 THEN 'Inactive'
+                WHEN status = 1 THEN 'Active'
+            ELSE 'None' END) AS status"), 'id'
+        )->where('token', $token)
+        ->where('status', 1)
+        ->first();
+
+        if(is_null($UpdateUser)) { 
+            return response()->json(["message" => "Failed to activate your account"], 404);
+        } else {
+            return response()->json($result_user_activate, 201);
+        }
+    }
+    
 }
