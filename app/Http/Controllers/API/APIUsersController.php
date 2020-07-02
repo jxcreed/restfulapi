@@ -110,6 +110,24 @@ class APIUsersController extends Controller
 
         try {
             $Users = UsersModel::get();
+            foreach($Users as $key=>$user) {
+                
+                if(empty($Users[$key]['api_token'])) {
+                    unset($Users[$key]['email']);
+                    unset($Users[$key]['lastname']);
+                }
+
+                $Users[$key]['status'] = ($Users[$key]['status'] == 1) ? 'Active' : 'Inactive';
+                unset($Users[$key]['password']);
+                unset($Users[$key]['gender']);
+                unset($Users[$key]['email_verified_at']);
+                unset($Users[$key]['remember_token']);
+                unset($Users[$key]['created_at']);
+                unset($Users[$key]['updated_at']);
+                $Users[$key]['bearer_token'] = $Users[$key]['api_token'];
+                unset($Users[$key]['api_token']);
+                
+            }
         }
         catch (\Exception $e) {
             $Users = null;
