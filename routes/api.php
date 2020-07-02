@@ -20,3 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('users-list', 'API\APIUsersController@usersSave');
 Route::get('email-verification/{token}', 'API\APIUsersController@usersActivation');
+Route::get('users-list', 'API\APIUsersController@usersList');
+
+
+Route::group(['middleware' => 'auth:api'], function() {
+	Route::post('login', 'API\APILoginController@login');
+});

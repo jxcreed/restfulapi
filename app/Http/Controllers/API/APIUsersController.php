@@ -105,5 +105,21 @@ class APIUsersController extends Controller
             return response()->json($result_user_activate, 201);
         }
     }
+
+    public function usersList() {
+
+        try {
+            $Users = UsersModel::get();
+        }
+        catch (\Exception $e) {
+            $Users = null;
+        }
+
+        if(!$Users->isEmpty()) { 
+            return response()->json($Users, 201);
+        } else {
+            return response()->json(["message" => "No record found"], 404);
+        }
+    }
     
 }
