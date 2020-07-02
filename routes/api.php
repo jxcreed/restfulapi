@@ -25,4 +25,5 @@ Route::get('users-list', 'API\APIUsersController@usersList');
 
 Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('login', 'API\APILoginController@login');
+	Route::put('user-changepassword/{id}', 'API\APIUsersController@changePassword');
 });

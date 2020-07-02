@@ -139,5 +139,43 @@ class APIUsersController extends Controller
             return response()->json(["message" => "No record found"], 404);
         }
     }
+
+    public function changePassword(Request $request, $id) {
+
+        $rules = [
+            'current_password' => 'required',
+            'new_password' => 'required',
+            'confirm_new_password' => 'required',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user_account = UsersModel::find($id);
+
+        if(is_null($user_account)) {
+            return response()->json(["message" => "Record not found!"], 404);
+        }
+
+        $validCredentials = Hash::check($request->current_password, $user_account->password);
+
+        if($validCredentials) {
+            if($request->new_password == $request->confirm_new_password) {
+                $user_account->update([
+                    'password' => Hash::make($request->new_password),
+                ]);
+
+                return response()->json($user_account, 200);
+            }
+            else {
+                return response()->json(["message" => "New Password and Confirm New Password does not match!"], 404);
+            }
+        } else {
+            return response()->json(["message" => "Current Password does not match to our record!"], 404);
+        }
+
+    }
     
 }
