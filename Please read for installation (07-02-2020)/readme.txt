@@ -37,4 +37,4 @@ To Test the RESTful API use POSTMAN:
 = [GET] http://dev.restfulapi.com/api/email-verification/YDOVJRIUrQN25nHJoDXb9DuSyyGYCMeJK0wd4jFpcAH9WAFzubhQTBzmnDo0ZRQy6ZXlQBisSAH69D508wXMzxDg9mv3XGF45jOc
 3. Login = [POST] http://dev.restfulapi.com/api/login
 4. Users list = [GET] http://dev.restfulapi.com/api/users-list
-5. Change password = [PUT] http://dev.restfulapi.com/api/user-changepassword
+5. Change password = [PUT] http://dev.restfulapi.com/api/user-changepassword/1
